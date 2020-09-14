@@ -2,6 +2,8 @@
 
 namespace Kris\LaravelFormBuilder;
 
+use InvalidArgumentException;
+
 class Rules
 {
 
@@ -26,119 +28,132 @@ class Rules
     protected $messages;
 
     /**
-     * @param array $rules
-     * @param array $attributes
-     * @param array $messages
+     * @param array  $rules
+     * @param array  $attributes
+     * @param array  $messages
      */
-    public function __construct(array $rules, array $attributes = [], array $messages = []) {
+    public function __construct(array $rules, array $attributes = [], array $messages = [])
+    {
         $this->rules = $rules;
         $this->attributes = $attributes;
         $this->messages = $messages;
     }
 
     /**
-     * @param string $name
+     * @param string  $name
+     * @return Rules
      */
-    public function setFieldName($name) {
+    public function setFieldName($name)
+    {
         $this->fieldName = $name;
 
         return $this;
     }
 
     /**
-     * @param string $fieldName
+     * @param string  $fieldName
+     * @return array|mixed
      */
-    public function getFieldRules($fieldName = null) {
-      $fieldName = $this->ensureFieldName($fieldName);
+    public function getFieldRules($fieldName = null)
+    {
+        $fieldName = $this->ensureFieldName($fieldName);
 
-      $rules = $this->rules;
-      return isset($rules[$fieldName]) ? $rules[$fieldName] : [];
+        $rules = $this->rules;
+        return isset($rules[$fieldName]) ? $rules[$fieldName] : [];
     }
 
     /**
-     * @param mixes $rule
-     * @param string $fieldName
+     * @param mixed  $rule
+     * @param string  $fieldName
      */
-    public function addFieldRule($rule, $fieldName = null) {
-      $rules = $this->getFieldRules($fieldName);
-      $rules[] = $rule;
-      $this->setFieldRules($rules, $fieldName);
+    public function addFieldRule($rule, $fieldName = null)
+    {
+        $rules = $this->getFieldRules($fieldName);
+        $rules[] = $rule;
+        $this->setFieldRules($rules, $fieldName);
     }
 
     /**
-     * @param array $rules
-     * @param string $fieldName
+     * @param array  $rules
+     * @param string  $fieldName
      */
-    public function setFieldRules(array $rules, $fieldName = null) {
-      $fieldName = $this->ensureFieldName($fieldName);
-      $this->rules[$fieldName] = $rules;
+    public function setFieldRules(array $rules, $fieldName = null)
+    {
+        $fieldName = $this->ensureFieldName($fieldName);
+        $this->rules[$fieldName] = $rules;
     }
 
     /**
-     * @param string $fieldName
+     * @param string  $fieldName
+     * @return string|null
      */
-    protected function ensureFieldName($fieldName) {
-      if (!$fieldName) {
-        if (!$this->fieldName) {
-          throw new InvalidArgumentException("Field functions on non-field Rules need explicit field name");
+    protected function ensureFieldName($fieldName)
+    {
+        if (!$fieldName) {
+            if (!$this->fieldName) {
+                throw new InvalidArgumentException("Field functions on non-field Rules need explicit field name");
+            }
+
+            $fieldName = $this->fieldName;
         }
 
-        $fieldName = $this->fieldName;
-      }
-
-      return $fieldName;
+        return $fieldName;
     }
 
     /**
-     * @param array $rules
-     * @param array $attributes
-     * @param array $messages
+     * @param array|Rules  $rules
+     * @return Rules
      */
-    public function append($rules) {
-      if (is_array($rules)) {
-        $rules = static::fromArray($rules);
-      }
+    public function append($rules)
+    {
+        if (is_array($rules)) {
+            $rules = static::fromArray($rules);
+        }
 
-      $this->rules = array_replace_recursive($this->rules, $rules->getRules());
-      $this->attributes = array_replace_recursive($this->attributes, $rules->getAttributes());
-      $this->messages = array_replace_recursive($this->messages, $rules->getMessages());
+        $this->rules = array_replace_recursive($this->rules, $rules->getRules());
+        $this->attributes = array_replace_recursive($this->attributes, $rules->getAttributes());
+        $this->messages = array_replace_recursive($this->messages, $rules->getMessages());
 
-      return $this;
+        return $this;
     }
 
     /**
      * @return array
      */
-    public function getRules() {
-      return $this->rules;
+    public function getRules()
+    {
+        return $this->rules;
     }
 
     /**
      * @return array
      */
-    public function getAttributes() {
-      return $this->attributes;
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 
     /**
      * @return array
      */
-    public function getMessages() {
-      return $this->messages;
+    public function getMessages()
+    {
+        return $this->messages;
     }
 
     /**
-     * @param array[] $rules
+     * @param array[]  $rules
      * @return static
      */
-    static public function fromArray($rules) {
+    static public function fromArray($rules)
+    {
         if (!$rules) {
             return new static([]);
         }
 
         $rules += [
-            'rules' => [],
-            'attributes' => [],
+            'rules'          => [],
+            'attributes'     => [],
             'error_messages' => [],
         ];
 
