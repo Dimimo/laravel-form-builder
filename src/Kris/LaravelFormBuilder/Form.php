@@ -860,6 +860,23 @@ class Form
     }
 
     /**
+     * Add multiple peices of data at once.
+     *
+     * @deprecated deprecated since 1.6.12, will be removed in 1.7 - use 3rd param on create, or 2nd on plain method to pass data
+     * will be switched to protected in 1.7.
+     * @param $data
+     * @return $this
+     **/
+    public function addData(array $data)
+    {
+        foreach ($data as $key => $value) {
+            $this->setData($key, $value);
+        }
+
+        return $this;
+    }
+
+    /**
      * Get current request.
      *
      * @return Request

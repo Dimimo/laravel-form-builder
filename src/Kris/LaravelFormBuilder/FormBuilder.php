@@ -210,9 +210,9 @@ class FormBuilder
     public function setDependenciesAndOptions($instance, array $options = [], array $data = [])
     {
         return $instance
+            ->setFormHelper($this->formHelper)
             ->addData($data)
             ->setRequest($this->container->make('request'))
-            ->setFormHelper($this->formHelper)
             ->setEventDispatcher($this->eventDispatcher)
             ->setFormBuilder($this)
             ->setValidator($this->container->make('validator'))
