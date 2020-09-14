@@ -39,9 +39,9 @@ abstract class ParentType extends FormField
     }
 
     /**
-     * @param  mixed $val
+     * @param mixed  $val
      *
-     * @return ChildFormType
+     * @return ParentType
      */
     public function setValue($val)
     {
@@ -53,6 +53,11 @@ abstract class ParentType extends FormField
 
     /**
      * {inheritdoc}
+     * @param array  $options
+     * @param bool  $showLabel
+     * @param bool  $showField
+     * @param bool  $showError
+     * @return string
      */
     public function render(array $options = [], $showLabel = true, $showField = true, $showError = true)
     {
@@ -73,6 +78,7 @@ abstract class ParentType extends FormField
     /**
      * Get a child of the choice field.
      *
+     * @param $key
      * @return mixed
      */
     public function getChild($key)
@@ -83,6 +89,7 @@ abstract class ParentType extends FormField
     /**
      * Remove child.
      *
+     * @param $key
      * @return $this
      */
     public function removeChild($key)

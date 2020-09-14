@@ -2,6 +2,9 @@
 
 namespace Kris\LaravelFormBuilder\Fields;
 
+use BadMethodCallException;
+use Exception;
+use InvalidArgumentException;
 use Kris\LaravelFormBuilder\Form;
 
 class ChildFormType extends ParentType
@@ -34,11 +37,11 @@ class ChildFormType extends ParentType
     protected function getDefaults()
     {
         return [
-            'class' => null,
-            'value' => null,
+            'class'       => null,
+            'value'       => null,
             'formOptions' => [],
-            'data' => [],
-            'exclude' => []
+            'data'        => [],
+            'exclude'     => []
         ];
     }
 
@@ -76,6 +79,7 @@ class ChildFormType extends ParentType
 
     /**
      * @return mixed|void
+     * @throws Exception
      */
     protected function createChildren()
     {
@@ -96,7 +100,7 @@ class ChildFormType extends ParentType
 
     /**
      * @return Form
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getClassFromOptions()
     {
@@ -107,16 +111,16 @@ class ChildFormType extends ParentType
         $class = $this->getOption('class');
 
         if (!$class) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Please provide full name or instance of Form class.'
             );
         }
 
         if (is_string($class)) {
             $options = [
-                'model' => $this->getOption($this->valueProperty) ?: $this->parent->getModel(),
-                'name' => $this->name,
-                'language_name' => $this->parent->getLanguageName(),
+                'model'                => $this->getOption($this->valueProperty) ?: $this->parent->getModel(),
+                'name'                 => $this->name,
+                'language_name'        => $this->parent->getLanguageName(),
                 'translation_template' => $this->parent->getTranslationTemplate(),
             ];
 
@@ -162,7 +166,7 @@ class ChildFormType extends ParentType
             return $class->setName($this->name);
         }
 
-        throw new \InvalidArgumentException(
+        throw new InvalidArgumentException(
             'Class provided does not exist or it passed in wrong format.'
         );
     }
@@ -201,14 +205,15 @@ class ChildFormType extends ParentType
             return call_user_func_array([$this->form, $method], $arguments);
         }
 
-        throw new \BadMethodCallException(
-            'Method ['.$method.'] does not exist on form ['.get_class($this->form).']'
+        throw new BadMethodCallException(
+            'Method [' . $method . '] does not exist on form [' . get_class($this->form) . ']'
         );
     }
 
     /**
      * Check if provided value is valid for this type.
      *
+     * @param $value
      * @return bool
      */
     protected function isValidValue($value)

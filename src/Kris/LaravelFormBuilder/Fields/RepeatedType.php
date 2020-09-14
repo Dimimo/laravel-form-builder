@@ -2,6 +2,8 @@
 
 namespace Kris\LaravelFormBuilder\Fields;
 
+use Illuminate\Contracts\Container\BindingResolutionException;
+
 class RepeatedType extends ParentType
 {
 
@@ -21,9 +23,9 @@ class RepeatedType extends ParentType
     protected function getDefaults()
     {
         return [
-            'type' => 'password',
-            'second_name' => null,
-            'first_options' => ['label' => 'Password'],
+            'type'           => 'password',
+            'second_name'    => null,
+            'first_options'  => ['label' => 'Password'],
             'second_options' => ['label' => 'Password confirmation']
         ];
     }
@@ -39,6 +41,7 @@ class RepeatedType extends ParentType
 
     /**
      * @inheritdoc
+     * @throws BindingResolutionException
      */
     protected function createChildren()
     {
@@ -50,11 +53,11 @@ class RepeatedType extends ParentType
         }
 
         $form = $this->parent->getFormBuilder()->plain([
-            'name' => $this->parent->getName(),
+            'name'  => $this->parent->getName(),
             'model' => $this->parent->getModel()
         ])
-        ->add($firstName, $this->getOption('type'), $this->getOption('first_options'))
-        ->add($secondName, $this->getOption('type'), $this->getOption('second_options'));
+            ->add($firstName, $this->getOption('type'), $this->getOption('first_options'))
+            ->add($secondName, $this->getOption('type'), $this->getOption('second_options'));
 
         $this->children['first'] = $form->getField($firstName);
         $this->children['second'] = $form->getField($secondName);
