@@ -3,7 +3,6 @@
 namespace Kris\LaravelFormBuilder\Events;
 
 use Kris\LaravelFormBuilder\Fields\FormField;
-use Kris\LaravelFormBuilder\Form;
 use Kris\LaravelFormBuilder\Rules;
 
 class AfterCollectingFieldRules
@@ -25,9 +24,8 @@ class AfterCollectingFieldRules
     /**
      * Create a new after field creation instance.
      *
-     * @param Form $form
-     * @param FormField $field
-     * @return void
+     * @param FormField  $field
+     * @param Rules  $rules
      */
     public function __construct(FormField $field, Rules $rules) {
         $this->field = $field;
