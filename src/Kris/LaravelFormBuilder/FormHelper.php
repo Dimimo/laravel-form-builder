@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Translation\Translator;
+use InvalidArgumentException;
 use Kris\LaravelFormBuilder\Events\AfterCollectingFieldRules;
 use Kris\LaravelFormBuilder\Fields\FormField;
-use Kris\LaravelFormBuilder\Form;
-use Kris\LaravelFormBuilder\RulesParser;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FormHelper
 {
@@ -151,7 +151,7 @@ class FormHelper
         $types = array_keys(static::$availableFieldTypes);
 
         if (!$type || trim($type) == '') {
-            throw new \InvalidArgumentException('Field type must be provided.');
+            throw new InvalidArgumentException('Field type must be provided.');
         }
 
         if ($this->hasCustomField($type)) {
@@ -159,7 +159,7 @@ class FormHelper
         }
 
         if (!in_array($type, $types)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'Unsupported field type [%s]. Available types are: %s',
                     $type,
@@ -202,6 +202,7 @@ class FormHelper
      *
      * @param $name
      * @param $class
+     * @return array|void
      */
     public function addCustomField($name, $class)
     {
@@ -209,7 +210,7 @@ class FormHelper
             return $this->customTypes[$name] = $class;
         }
 
-        throw new \InvalidArgumentException('Custom field ['.$name.'] already exists on this form object.');
+        throw new InvalidArgumentException('Custom field [' . $name . '] already exists on this form object.');
     }
 
     /**
@@ -237,8 +238,8 @@ class FormHelper
     }
 
     /**
-     * @param object $model
-     * @return object|null
+     * @param object|array  $model
+     * @return array|null
      */
     public function convertModelToArray($model)
     {
@@ -290,8 +291,8 @@ class FormHelper
     }
 
     /**
-     * @param FormField $field
-     * @return array
+     * @param FormField  $field
+     * @return Rules
      */
     public function getFieldValidationRules(FormField $field)
     {
@@ -308,8 +309,8 @@ class FormHelper
     }
 
     /**
-     * @param FormField[] $fields
-     * @return array
+     * @param FormField[]  $fields
+     * @return Rules
      */
     public function mergeFieldsRules($fields)
     {
@@ -363,6 +364,9 @@ class FormHelper
     /**
      * Alter a form's validity recursively, and add messages with nested form prefix.
      *
+     * @param Form  $form
+     * @param Form  $mainForm
+     * @param $isValid
      * @return void
      */
     public function alterValid(Form $form, Form $mainForm, &$isValid)
@@ -387,6 +391,9 @@ class FormHelper
     /**
      * Add unprefixed messages with prefix to a MessageBag.
      *
+     * @param MessageBag  $messageBag
+     * @param string  $prefix
+     * @param array  $keyedMessages
      * @return void
      */
     public function appendMessagesWithPrefix(MessageBag $messageBag, $prefix, array $keyedMessages)
@@ -437,20 +444,21 @@ class FormHelper
     /**
      * Check if field name is valid and not reserved.
      *
-     * @throws \InvalidArgumentException
-     * @param string $name
-     * @param string $className
+     * @param string  $name
+     * @param string  $className
+     * @return bool
+     * @throws InvalidArgumentException
      */
     public function checkFieldName($name, $className)
     {
         if (!$name || trim($name) == '') {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "Please provide valid field name for class [{$className}]"
             );
         }
 
         if (in_array($name, static::$reservedFieldNames)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "Field name [{$name}] in form [{$className}] is a reserved word. Please use a different field name." .
                 "\nList of all reserved words: " . join(', ', static::$reservedFieldNames)
             );
