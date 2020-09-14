@@ -36,7 +36,7 @@ class Trim implements FilterInterface
     /**
      * @param  $charList
      *
-     * @return \Kris\LaravelFormBuilder\Filters\Collection\Trim
+     * @return Trim
      */
     public function setCharList($charList)
     {

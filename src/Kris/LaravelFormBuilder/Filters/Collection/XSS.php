@@ -13,10 +13,10 @@ use Kris\LaravelFormBuilder\Filters\FilterInterface;
 class XSS implements FilterInterface
 {
     /**
-     * @param  mixed $value
-     * @param  array $options
+     * @param mixed  $value
+     * @param array  $options
      *
-     * @return mixed
+     * @return void
      */
     public function __construct($value, $options = [])
     {
@@ -121,9 +121,8 @@ class XSS implements FilterInterface
         $decoded = base64_decode($input);
         $decoded = $this->stripTags($decoded);
         $decoded = $this->stripEncodedEntities($decoded);
-        $output  = base64_encode($decoded);
 
-        return $output;
+        return base64_encode($decoded);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Kris\LaravelFormBuilder\Filters\Collection;
 
+use Exception;
 use Kris\LaravelFormBuilder\Filters\FilterInterface;
 
 /**
@@ -20,7 +21,8 @@ class Uppercase implements FilterInterface
     /**
      * StringToUpper constructor.
      *
-     * @param array $options
+     * @param array  $options
+     * @throws Exception
      */
     public function __construct($options = [])
     {
@@ -34,24 +36,22 @@ class Uppercase implements FilterInterface
     }
 
     /**
-     * @param null $encoding
+     * @param null  $encoding
      *
-     * @return \Kris\LaravelFormBuilder\Filters\Collection\Uppercase
+     * @return Uppercase
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function setEncoding($encoding)
     {
         if ($encoding !== null) {
             if (!function_exists('mb_strtoupper')) {
-                $ex = new \Exception('mbstring extension is required for value mutating.');
-                throw $ex;
+                throw new Exception('mbstring extension is required for value mutating.');
             }
 
             $encoding = (string) $encoding;
             if (!in_array(strtolower($encoding), array_map('strtolower', mb_list_encodings()))) {
-                $ex = new \Exception('The given encoding '.$encoding.' is not supported by mbstring ext.');
-                throw $ex;
+                throw new Exception('The given encoding ' . $encoding . ' is not supported by mbstring ext.');
             }
         }
 

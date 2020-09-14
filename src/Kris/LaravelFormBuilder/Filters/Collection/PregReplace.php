@@ -2,6 +2,7 @@
 
 namespace Kris\LaravelFormBuilder\Filters\Collection;
 
+use Exception;
 use Kris\LaravelFormBuilder\Filters\FilterInterface;
 
 /**
@@ -45,9 +46,9 @@ class PregReplace implements FilterInterface
     /**
      * Set the match pattern for the regex being called within filter().
      *
-     * @param mixed $pattern - first arg of preg_replace
+     * @param mixed  $pattern - first arg of preg_replace
      *
-     * @return \Kris\LaravelFormBuilder\Filters\Collection\PregReplace
+     * @return PregReplace
      */
     public function setPattern($pattern)
     {
@@ -68,9 +69,9 @@ class PregReplace implements FilterInterface
     /**
      * Set the Replacement pattern/string for the preg_replace called in filter.
      *
-     * @param mixed $replacement - same as the second argument of preg_replace
+     * @param mixed  $replacement - same as the second argument of preg_replace
      *
-     * @return \Kris\LaravelFormBuilder\Filters\Collection\PregReplace
+     * @return PregReplace
      */
     public function setReplacement($replacement)
     {
@@ -89,18 +90,17 @@ class PregReplace implements FilterInterface
     }
 
     /**
-     * @param  mixed $value
-     * @param  array $options
+     * @param mixed  $value
+     * @param array  $options
      *
      * @return mixed
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function filter($value, $options = [])
     {
         if ($this->getPattern() == null) {
-            $ex = new \Exception(get_class($this) . ' does not have a valid MatchPattern set.');
-            throw $ex;
+            throw new Exception(get_class($this) . ' does not have a valid MatchPattern set.');
         }
 
         return preg_replace($this->getPattern(), $this->getReplacement(), $value);

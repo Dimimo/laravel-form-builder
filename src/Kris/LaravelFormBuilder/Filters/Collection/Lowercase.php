@@ -2,6 +2,7 @@
 
 namespace Kris\LaravelFormBuilder\Filters\Collection;
 
+use Exception;
 use Kris\LaravelFormBuilder\Filters\FilterInterface;
 
 /**
@@ -22,7 +23,8 @@ class Lowercase implements FilterInterface
     /**
      * StringToLower constructor.
      *
-     * @param array $options
+     * @param array  $options
+     * @throws Exception
      */
     public function __construct(array $options = [])
     {
@@ -46,24 +48,22 @@ class Lowercase implements FilterInterface
     }
 
     /**
-     * @param null $encoding
+     * @param null  $encoding
      *
-     * @return \Kris\LaravelFormBuilder\Filters\Collection\Lowercase
+     * @return Lowercase
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function setEncoding($encoding = null)
     {
         if ($encoding !== null) {
             if (!function_exists('mb_strtolower')) {
-                $ex = new \Exception('mbstring extension is required for value mutating.');
-                throw $ex;
+                throw new Exception('mbstring extension is required for value mutating.');
             }
 
             $encoding = (string) $encoding;
             if (!in_array(strtolower($encoding), array_map('strtolower', mb_list_encodings()))) {
-                $ex = new \Exception('The given encoding '.$encoding.' is not supported by mbstring ext.');
-                throw $ex;
+                throw new Exception('The given encoding ' . $encoding . ' is not supported by mbstring ext.');
             }
         }
 
@@ -72,10 +72,10 @@ class Lowercase implements FilterInterface
     }
 
     /**
-     * Returns the string lowercased $value.
+     * Returns the string lowercase $value.
      *
-     * @param  mixed $value
-     * @param  array $options
+     * @param mixed  $value
+     * @param array  $options
      *
      * @return mixed
      */

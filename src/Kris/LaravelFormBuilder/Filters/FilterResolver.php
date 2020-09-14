@@ -2,6 +2,7 @@
 
 namespace Kris\LaravelFormBuilder\Filters;
 
+use Exception;
 use Kris\LaravelFormBuilder\Filters\Exception\InvalidInstanceException;
 use Kris\LaravelFormBuilder\Filters\Exception\UnableToResolveFilterException;
 
@@ -17,12 +18,12 @@ class FilterResolver
      * Method instance used to resolve filter parameter to
      * FilterInterface object from filter Alias or object itself.
      *
-     * @param  mixed $filter
+     * @param mixed  $filter
      *
      * @return FilterInterface
      *
-     * @throws Exception\UnableToResolveFilterException
-     * @throws Exception\InvalidInstanceException
+     * @throws UnableToResolveFilterException
+     * @throws Exception
      */
     public static function instance($filter)
     {
@@ -38,22 +39,20 @@ class FilterResolver
             return self::validateFilterInstance($filter);
         }
 
-        $ex = new UnableToResolveFilterException();
-        throw $ex;
+        throw new UnableToResolveFilterException();
     }
 
     /**
      * @param $filter
      *
-     * @throws \Exception
-     *
      * @return mixed
+     * @throws Exception
+     *
      */
     private static function validateFilterInstance($filter)
     {
         if (!$filter instanceof FilterInterface) {
-            $ex = new InvalidInstanceException();
-            throw $ex;
+            throw new InvalidInstanceException();
         }
 
         return $filter;
@@ -62,7 +61,7 @@ class FilterResolver
     /**
      * @param  $filterName
      *
-     * @return FilterInterface|null
+     * @return FilterInterface|void
      */
     public static function resolveFromCollection($filterName)
     {

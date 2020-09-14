@@ -51,9 +51,9 @@ class StripTags implements FilterInterface
     /**
      * Sets the allowedTags property.
      *
-     * @param array|string $allowedTags
+     * @param array|string  $allowedTags
      *
-     * @return \Kris\LaravelFormBuilder\Filters\Collection\StripTags
+     * @return StripTags
      */
     public function setAllowedTags($allowedTags)
     {
@@ -108,9 +108,9 @@ class StripTags implements FilterInterface
     /**
      * Sets the allowedAttributes property.
      *
-     * @param array|string $allowedAttribs
+     * @param array|string  $allowedAttribs
      *
-     * @return \Kris\LaravelFormBuilder\Filters\Collection\StripTags
+     * @return StripTags
      */
     public function setAllowedAttributes($allowedAttribs)
     {

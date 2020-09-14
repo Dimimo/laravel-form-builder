@@ -2,6 +2,7 @@
 
 namespace Kris\LaravelFormBuilder\Filters\Exception;
 
+use Exception;
 use Kris\LaravelFormBuilder\Filters\FilterInterface;
 use Throwable;
 
@@ -11,7 +12,7 @@ use Throwable;
  * @package Kris\LaravelFormBuilder\Filters\Exception
  * @author  Djordje Stojiljkovic <djordjestojilljkovic@gmail.com>
  */
-class InvalidInstanceException extends \Exception
+class InvalidInstanceException extends Exception
 {
     public function __construct($message = "", $code = 0, Throwable $previous = null)
     {

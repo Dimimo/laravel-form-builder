@@ -2,6 +2,7 @@
 
 namespace Kris\LaravelFormBuilder\Filters\Collection;
 
+use Exception;
 use Kris\LaravelFormBuilder\Filters\FilterInterface;
 
 /**
@@ -71,9 +72,9 @@ class HtmlEntities implements FilterInterface
     }
 
     /**
-     * @param integer $style
+     * @param integer  $style
      *
-     * @return \Kris\LaravelFormBuilder\Filters\Collection\HtmlEntities
+     * @return HtmlEntities
      */
     public function setQuoteStyle($style)
     {
@@ -90,9 +91,9 @@ class HtmlEntities implements FilterInterface
     }
 
     /**
-     * @param  string $encoding
+     * @param string  $encoding
      *
-     * @return \Kris\LaravelFormBuilder\Filters\Collection\HtmlEntities
+     * @return HtmlEntities
      */
     public function setEncoding($encoding)
     {
@@ -117,9 +118,9 @@ class HtmlEntities implements FilterInterface
      *
      * Proxies to {@link setEncoding()}.
      *
-     * @param  string $charSet
+     * @param string  $charSet
      *
-     * @return \Kris\LaravelFormBuilder\Filters\Collection\HtmlEntities
+     * @return HtmlEntities
      */
     public function setCharSet($charSet)
     {
@@ -139,9 +140,9 @@ class HtmlEntities implements FilterInterface
     /**
      * Sets the doubleQuote property.
      *
-     * @param  boolean $doubleQuote
+     * @param boolean  $doubleQuote
      *
-     * @return \Kris\LaravelFormBuilder\Filters\Collection\HtmlEntities
+     * @return HtmlEntities
      */
     public function setDoubleQuote($doubleQuote)
     {
@@ -150,12 +151,12 @@ class HtmlEntities implements FilterInterface
     }
 
     /**
-     * @param  string $value
-     * @param  array $options
+     * @param string  $value
+     * @param array  $options
      *
      * @return mixed
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function filter($value, $options = [])
     {
@@ -169,8 +170,7 @@ class HtmlEntities implements FilterInterface
 
         if (strlen($value) && !strlen($filtered)) {
             if (!function_exists('iconv')) {
-                $ex = new \Exception('Encoding mismatch has resulted in htmlentities errors.');
-                throw $ex;
+                throw new Exception('Encoding mismatch has resulted in htmlentities errors.');
             }
 
             $enc      = $this->getEncoding();
@@ -178,8 +178,7 @@ class HtmlEntities implements FilterInterface
             $filtered = htmlentities($value, $this->getQuoteStyle(), $enc, $this->getDoubleQuote());
 
             if (!strlen($filtered)) {
-                $ex = new \Exception('Encoding mismatch has resulted in htmlentities errors.');
-                throw $ex;
+                throw new Exception('Encoding mismatch has resulted in htmlentities errors.');
             }
         }
 

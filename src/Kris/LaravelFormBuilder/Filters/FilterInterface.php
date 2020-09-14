@@ -2,6 +2,8 @@
 
 namespace Kris\LaravelFormBuilder\Filters;
 
+use Exception;
+
 /**
  * Interface FilterInterface
  *
@@ -13,12 +15,12 @@ interface FilterInterface
     /**
      * Returns the result of filtering $value.
      *
-     * @param  mixed $value
-     * @param  array $options
-     *
-     * @throws \Exception If filtering $value is impossible.
+     * @param mixed  $value
+     * @param array  $options
      *
      * @return mixed
+     * @throws Exception If filtering $value is impossible.
+     *
      */
     public function filter($value, $options = []);
 
